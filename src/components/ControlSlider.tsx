@@ -22,6 +22,7 @@ export const ControlSlider = forwardRef<
       renderCurrentTime,
       sliderStyle,
       playableColor,
+      playVideoElement,
       fullScreenElement,
       sliderContainerStyle,
       radius,
@@ -89,6 +90,9 @@ export const ControlSlider = forwardRef<
 
     return (
       <View style={[styles.container, sliderContainerStyle]}>
+        {!!playVideoElement && (
+          <View style={styles.playOnSlider}>{playVideoElement}</View>
+        )}
         {renderCurrentTime?.(timeValue)}
         <View
           style={[styles.slider, sliderStyle, { borderRadius: radius }]}
@@ -129,11 +133,11 @@ export const ControlSlider = forwardRef<
                 hitSlop={
                   typeof thumbHitSlop === 'number'
                     ? {
-                        top: thumbHitSlop,
-                        bottom: thumbHitSlop,
-                        left: thumbHitSlop,
-                        right: thumbHitSlop,
-                      }
+                      top: thumbHitSlop,
+                      bottom: thumbHitSlop,
+                      left: thumbHitSlop,
+                      right: thumbHitSlop,
+                    }
                     : thumbHitSlop
                 }
               >
@@ -187,6 +191,10 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     zIndex: 2,
+  },
+  playOnSlider: {
+    marginLeft: 0,
+    marginRight: 10,
   },
   fullScreen: {
     marginLeft: 10,
