@@ -24,7 +24,7 @@ const ControlsVisibilityContext =
 
 type ControlsVisibilityProviderProps = {
   visible: boolean;
-  onHide: () => void;
+  // onHide: () => void;
   visibilityDuration?: number;
   isPlaying: boolean;
   autoDismiss?: boolean;
@@ -32,7 +32,7 @@ type ControlsVisibilityProviderProps = {
 
 const ControlsVisibilityProvider = ({
   visible,
-  onHide,
+  // onHide,
   children,
   visibilityDuration,
   isPlaying,
@@ -43,11 +43,12 @@ const ControlsVisibilityProvider = ({
     if (!timeoutId.current && autoDismiss) {
       timeoutId.current = setTimeout(() => {
         if (isPlaying) {
-          onHide();
+          // onHide();
         }
       }, visibilityDuration);
     }
-  }, [visibilityDuration, onHide, isPlaying, autoDismiss]);
+  // }, [visibilityDuration, onHide, isPlaying, autoDismiss]);
+   }, [visibilityDuration, isPlaying, autoDismiss]);
 
   const stopTimer = useCallback(() => {
     clearTimeout(timeoutId.current);
