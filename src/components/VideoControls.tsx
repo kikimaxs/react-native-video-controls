@@ -1,9 +1,6 @@
 import React, {
   PropsWithChildren,
-  useCallback,
-  useEffect,
   useMemo,
-  useState,
 } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -11,7 +8,6 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
 } from 'react-native-reanimated';
 import ControlsVisibilityProvider from '../context/ControlsVisibility';
 import useLayout from '../hooks/useLayout';
@@ -39,16 +35,14 @@ export const VideoControls = ({
   componentsProps,
   onFastForward,
   onFastRewind,
-  autoHideAfterDuration = 3000,
   children,
   videoStateContainerStyle,
   containerStyle,
   videoElement,
   onZoomIn,
   onZoomOut,
-  autoDismiss = true,
 }: PropsWithChildren<VideoControlProps>) => {
-  const [visible, setVisible] = useState(initialVisible);
+  // const [visible, setVisible] = useState(initialVisible);
   const opacityAnim = useSharedValue(initialVisible ? 1 : 0);
   const usedComponents = useMemo(() => {
     return { ...defaultComponents, ...components };
@@ -76,16 +70,16 @@ export const VideoControls = ({
     },
   });
 
-  const toggleVisible = useCallback(() => {
-    setVisible((old) => !old);
-  }, []);
+  // const toggleVisible = useCallback(() => {
+  //   setVisible((old) => !old);
+  // }, []);
 
   const tapGesture = useTapGesture({
     numberOfTaps: 1,
     maxTapDuration: 100,
     onEnd: () => {
       'worklet';
-      runOnJS(toggleVisible)();
+      // runOnJS(toggleVisible)();
     },
   });
   const doubleTap = useTapGesture({
@@ -119,11 +113,11 @@ export const VideoControls = ({
     };
   }, [videoStateLayout, containerLayout]);
 
-  useEffect(() => {
-    opacityAnim.value = withTiming(visible ? 1 : 0, {
-      duration: visible ? 200 : 600,
-    });
-  }, [visible]);
+  // useEffect(() => {
+  //   opacityAnim.value = withTiming(visible ? 1 : 0, {
+  //     duration: visible ? 200 : 600,
+  //   });
+  // }, [visible]);
 
   const animatedContainerStyle = useAnimatedStyle(() => {
     return {
@@ -134,18 +128,13 @@ export const VideoControls = ({
   const SliderComponent = usedComponents.slider!;
   const VideoStateComponent = usedComponents.videoState!;
 
-  const onHide = useCallback(() => {
-    setVisible(false);
-  }, []);
+  // const onHide = useCallback(() => {
+  //   setVisible(false);
+  // }, []);
 
   return (
     <ControlsVisibilityProvider
-      onHide={onHide}
-      visible={visible}
-      visibilityDuration={autoHideAfterDuration}
-      isPlaying={componentsProps?.videoState?.isPlaying ?? false}
-      autoDismiss={autoDismiss}
-    >
+      isPlaying={componentsProps?.videoState?.isPlaying ?? false} visible={false}    >
       <GestureDetector
         gesture={Gesture.Exclusive(pinchGesture, doubleTap, tapGesture)}
       >
@@ -154,8 +143,18 @@ export const VideoControls = ({
           <Animated.View
             style={[styles.container, animatedContainerStyle, containerStyle]}
             onLayout={onContainerLayout}
-            pointerEvents={visible ? 'auto' : 'none'}
+            pointerEvents={'none'}
           >
+            {/* <LinearGradient
+              colors={
+                componentsProps?.videoState?.isPlaying ?? true
+                  ? ['rgba(0, 0, 0, 0.3)', 'transparent']
+                  : ['rgba(0, 0, 0, 0.7)', 'transparent']
+              }
+              start={{ x: 0, y: 1 }}
+              end={{ x: 0, y: 0 }}
+              style={{ flex: 1, borderRadius: 20 }}
+            > */}
             <SliderComponent {..._componentsProps.slider!} />
             <View
               style={[
@@ -169,6 +168,7 @@ export const VideoControls = ({
               <VideoStateComponent {..._componentsProps.videoState!} />
             </View>
             {children}
+            {/* </LinearGradient> */}
           </Animated.View>
         </Animated.View>
       </GestureDetector>
@@ -181,7 +181,7 @@ export default VideoControls;
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    // backgroundColor: 'rgba(0, 0, 0, 0.3)',
     zIndex: 999,
   },
   videoStateContainer: {
