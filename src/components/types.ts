@@ -1,3 +1,4 @@
+import type React from 'react';
 import type {
   Insets,
   LayoutChangeEvent,
@@ -66,6 +67,7 @@ export type ControlSliderProps = {
   /**
    * Element to render when the full width icon. Will render next to the total duration.
    */
+  playVideoElement?: React.ReactElement;
   fullScreenElement?: React.ReactElement;
   /**
    * Reanimated shared value to have access to the current progress time.
